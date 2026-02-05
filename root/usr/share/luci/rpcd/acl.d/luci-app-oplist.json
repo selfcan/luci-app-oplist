@@ -1,0 +1,23 @@
+{
+	"luci-app-oplist": {
+		"description": "Grant ACL access for OpenList App",
+		"read": {
+			"cgi-io": [ "download" ],
+			"file": {
+				"/etc/openlist/log/log.log": [ "read" ]
+			},
+			"uci": [ "oplist" ],
+			"ubus": {
+				"service": [ "list" ],
+				"uci": [ "get" ]
+			}
+		},
+		"write": {
+			"uci": [ "oplist" ],
+			"ubus": {
+				"service": [ "list" ],
+				"uci": [ "set", "commit" ]
+			}
+		}
+	}
+}

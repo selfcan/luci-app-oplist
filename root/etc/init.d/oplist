@@ -1,0 +1,97 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+USE_PROCD=1
+
+PROG="/usr/bin/openlist"
+CONF_DIR="/etc/openlist"
+CONF_FILE="$CONF_DIR/config.json"
+
+patch_val() {
+    local key="$1"
+    local val="$2"
+    local is_str="$3"
+    [ -z "$val" ] && return
+
+    if [ "$is_str" -eq 1 ]; then
+        sed -i "s|\"$key\": *\"[^\"]*\"|\"$key\": \"$val\"|g" "$CONF_FILE"
+    else
+        sed -i "s/\"$key\": *[a-zA-Z0-9\.-]*/\"$key\": $val/g" "$CONF_FILE"
+    fi
+}
+
+start_service() {
+    config_load oplist
+    local enabled
+    config_get_bool enabled main enabled 0
+    [ "$enabled" -eq 0 ] && return
+
+    mkdir -p "$CONF_DIR"
+
+    if [ ! -f "$CONF_FILE" ]; then
+        $PROG server --data "$CONF_DIR" >/dev/null 2>&1 &
+        local pid=$!
+        local wait=0
+        while [ ! -f "$CONF_FILE" ] && [ $wait -lt 10 ]; do
+            sleep 1
+            wait=$((wait + 1))
+        done
+        kill $pid
+        sleep 1
+        $PROG admin set password --data "$CONF_DIR"
+    fi
+
+    local port addr tls_en https_p cert key h2 h3 expire conn log_en log_size
+
+    config_get port main port "5244"
+    config_get addr main listen_addr "0.0.0.0"
+    config_get_bool tls_en main tls_enabled 0
+    config_get https_p main https_port "443"
+    config_get cert main tls_cert ""
+    config_get key main tls_key ""
+    config_get_bool h2 main h2_h3 0
+    config_get expire main site_login_expire "48"
+    config_get conn main site_max_connections "0"
+    config_get_bool log_en main log_enable 1
+    config_get log_size main log_max_size "50"
+
+    patch_val "address" "$addr" 1
+    patch_val "http_port" "$port" 0
+    patch_val "token_expires_in" "$expire" 0
+    patch_val "max_connections" "$conn" 0
+
+    if [ "$tls_en" -eq 1 ]; then
+        patch_val "force_https" "true" 0
+        patch_val "https_port" "$https_p" 0
+        [ -n "$cert" ] && patch_val "cert_file" "$cert" 1
+        [ -n "$key" ] && patch_val "key_file" "$key" 1
+        patch_val "enable_h2c" "true" 0
+        patch_val "enable_h3" "true" 0
+    else
+        patch_val "force_https" "false" 0
+    fi
+
+    local temp_d
+    config_get temp_d main temp_dir "/etc/openlist/temp"
+    patch_val "temp_dir" "$temp_d" 1
+
+    [ "$log_en" -eq 1 ] && patch_val "enable" "true" 0 || patch_val "enable" "false"
+    patch_val "max_size" "$log_size" 0
+    patch_val "name" "$CONF_DIR/log/log.log" 1
+
+    procd_open_instance "instance1"
+    procd_set_param command "$PROG" server --data "$CONF_DIR"
+    procd_set_param stdout 1
+    procd_set_param stderr 1
+    procd_set_param respawn
+    procd_close_instance
+}
+
+service_triggers() {
+    procd_add_reload_trigger "oplist"
+}
+
+reload_service() {
+    stop
+    start
+}
