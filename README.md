@@ -36,10 +36,9 @@ cd ./luci-app-oplist/root/usr/bin
 curl -LO https://github.com/OpenListTeam/OpenList/releases/download/v4.1.10/openlist-linux-musl-amd64.tar.gz
 # or another openlist binary URL
 tar -xzvf openlist-linux-musl-amd64.tar.gz
-mv openlist-linux-musl-amd64/openlist ./
-rm -rf openlist-linux-musl-amd64/
+rm -rf openlist-linux-musl-amd64/ openlist-linux-musl-amd64.tar.gz
 ls -ld openlist
-cd ../../../../
+cd ../../../../../
 ./scripts/feeds update -a && ./scripts/feeds install -a
 make package/luci-app-oplist/compile V=s -j$(nproc)
 ```
