@@ -1,10 +1,8 @@
 name: Autobuild luci-app-oplist
 
 on:
-  schedule:
-    - cron: '0 20 * * *'
   workflow_dispatch:
-
+  push:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,19 +16,20 @@ jobs:
           if [ "$TAG" == "$EXISTS" ]; then
             echo "status=skip" >> $GITHUB_OUTPUT
             echo "There is nothing to do."
-            exit 1
           else
             echo "status=go" >> $GITHUB_OUTPUT
             echo "tag=$TAG" >> $GITHUB_OUTPUT
           fi
 
       - name: install env
+        if: steps.check_upstream.outputs.status == 'go'
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libncurses5-dev libncursesw5-dev \
             zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip zstd
 
       - name: download source code
+        if: steps.check_upstream.outputs.status == 'go'
         run: |
           curl -LO https://immortalwrt.kyarucloud.moe/releases/24.10.4/targets/x86/64/immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
           tar -xvf immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
@@ -38,6 +37,7 @@ jobs:
           git clone https://github.com/mokanove/luci-app-oplist.git
 
       - name: download latest openlist
+        if: steps.check_upstream.outputs.status == 'go'
         run: |
           cd immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64/package/luci-app-oplist/root/usr/bin
           DL_URL=$(curl -s https://api.github.com/repos/OpenListTeam/OpenList/releases/latest | jq -r '.assets[] | select(.name | contains("musl-amd64.tar.gz")) | .browser_download_url')
@@ -47,6 +47,7 @@ jobs:
           rm -f *.tar.gz DONOTREMOVE
 
       - name: make
+        if: steps.check_upstream.outputs.status == 'go'
         run: |
           cd immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64
           rm -f package/luci-app-oplist/root/etc/openlist/DONOTREMOVE
@@ -61,13 +62,14 @@ jobs:
           make package/luci-app-oplist/compile V=s -j$(nproc)
 
       - name: find-ipk
+        if: steps.check_upstream.outputs.status == 'go'
         run: |
           mkdir -p output
           find immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64/bin/packages/x86_64/ -name "*.ipk" -exec cp {} output/ \;
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: success()
+        if: if: steps.check_upstream.outputs.status == 'go' && success()
         with:
           tag_name: ${{ steps.check_upstream.outputs.tag }}
           files: output/*.ipk
