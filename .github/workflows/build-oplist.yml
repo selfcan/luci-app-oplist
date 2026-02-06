@@ -24,8 +24,8 @@ jobs:
           fi
 
     - name: gohome
-      if: steps.check_upstream.outputs.status == 'skip'
-      uses: andymckay/cancel-action@0.3
+       if: steps.check_upstream.outputs.status == 'skip'
+       uses: andymckay/cancel-action@0.3
 
     - name: install env
         run: |
