@@ -9,50 +9,52 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-     - name: check-upstream
-       id: check_upstream
+      - name: check-upstream
+        id: check_upstream
         run: |
           TAG=$(curl -s https://api.github.com/repos/OpenListTeam/OpenList/releases/latest | jq -r .tag_name)
           EXISTS=$(curl -s https://api.github.com/repos/mokanove/luci-app-oplist/releases/tags/$TAG | jq -r .tag_name)
 
           if [ "$TAG" == "$EXISTS" ]; then
             echo "status=skip" >> $GITHUB_OUTPUT
-            echo "There is nothing to do.(From pacman)"
+            echo "There is nothing to do."
             exit 1
           else
             echo "status=go" >> $GITHUB_OUTPUT
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
           fi
 
-    - name: gohome
-       if: steps.check_upstream.outputs.status == 'skip'
-       uses: andymckay/cancel-action@0.3
+      - name: gohome
+        if: steps.check_upstream.outputs.status == 'skip'
+        uses: andymckay/cancel-action@0.3
 
-    - name: install env
+      - name: install env
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libncurses5-dev libncursesw5-dev \
             zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip zstd
 
-     - name: download source code
+      - name: download source code
         run: |
-         curl -LO https://immortalwrt.kyarucloud.moe/releases/24.10.4/targets/x86/64/immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
-         tar -xvf immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
-         cd immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64/package/
-         git clone https://github.com/mokanove/luci-app-oplist.git
+          curl -LO https://immortalwrt.kyarucloud.moe/releases/24.10.4/targets/x86/64/immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
+          tar -xvf immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64.tar.zst
+          cd immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64/package/
+          git clone https://github.com/mokanove/luci-app-oplist.git
 
-    - name: download latest openlist
+      - name: download latest openlist
         run: |
           cd immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64/package/luci-app-oplist/root/usr/bin
           DL_URL=$(curl -s https://api.github.com/repos/OpenListTeam/OpenList/releases/latest | jq -r '.assets[] | select(.name | contains("musl-amd64.tar.gz")) | .browser_download_url')
           curl -LO ${DL_URL}
-          tar -xzvf openlist-linux-musl-amd64.tar.gz
+          tar -xzvf *.tar.gz
+          find . -name "openlist" -type f -exec mv {} . \;
           chmod +x openlist
-          rm DONOTREMOVE
+          rm -f *.tar.gz DONOTREMOVE
 
       - name: make
         run: |
           cd immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64
-          rm package/luci-app-oplist/root/etc/openlist/DONOTREMOVE
+          rm -f package/luci-app-oplist/root/etc/openlist/DONOTREMOVE
           cd package/luci-app-oplist
           NEW_RELEASE=$(date +%s)
           sed -i "s/PKG_RELEASE:=.*/PKG_RELEASE:=${NEW_RELEASE}/g" ./Makefile
@@ -76,6 +78,6 @@ jobs:
           files: output/*.ipk
           body: |
             - OpenList Updated to : ${{ steps.check_upstream.outputs.tag }}
-            - Created using the fuck github-actions
+            - Fuck kate, Fuck github-actions, but build success.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
