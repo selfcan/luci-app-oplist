@@ -73,6 +73,6 @@ jobs:
           files: output/*.ipk
           body: |
             - OpenList Updated to : ${{ steps.check_upstream.outputs.tag }}
-            - Fuck kate, Fuck github-actions, but build success.
+            - There is an auto release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
