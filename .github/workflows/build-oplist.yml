@@ -69,7 +69,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: if: steps.check_upstream.outputs.status == 'go' && success()
+        if: steps.check_upstream.outputs.status == 'go' && success()
         with:
           tag_name: ${{ steps.check_upstream.outputs.tag }}
           files: output/*.ipk
