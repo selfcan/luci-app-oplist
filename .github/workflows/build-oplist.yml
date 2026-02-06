@@ -2,7 +2,7 @@ name: Autobuild luci-app-oplist
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 20 * * *'
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,6 @@ jobs:
           if [ "$TAG" == "$EXISTS" ]; then
             echo "status=skip" >> $GITHUB_OUTPUT
             echo "There is nothing to do."
-            exit 1
           else
             echo "status=go" >> $GITHUB_OUTPUT
             echo "tag=$TAG" >> $GITHUB_OUTPUT
