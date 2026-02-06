@@ -41,7 +41,7 @@ rm -rf openlist-linux-musl-amd64/
 ls -ld openlist
 cd ../../../../
 ./scripts/feeds update -a && ./scripts/feeds install -a
-make package/luci-app-powermanager/compile V=s -j$(nproc)
+make package/luci-app-oplist/compile V=s -j$(nproc)
 ```
 > Done
 ```
