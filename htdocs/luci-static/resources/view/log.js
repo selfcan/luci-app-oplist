@@ -62,7 +62,7 @@ return view.extend({
              E('div', { 'class': 'cbi-section' }, [
                  log_textarea,
                  E('div', { 'style': 'text-align:right; margin-top:10px;' },
-                   E('small', {}, _('Refresh every %s seconds.').format(L.env.pollinterval))
+                   E('small', {}, _('Refresh every 5 seconds.').format(L.env.pollinterval))
                  )
              ])
     ]);
