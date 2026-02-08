@@ -60,8 +60,7 @@ return view.extend({
 
         m = new form.Map('oplist', _('OpenList'),
                          _('A file list program powered by Gin and Solidjs.') + '<br>' +
-                         _('Default username: %s').format('<b>admin</b>') + ', ' +
-                         _('Default password: %s').format('<b>password</b>')
+                         _('Default username: admin ; Default password: password')
         );
 
         s = m.section(form.TypedSection);
