@@ -30,7 +30,7 @@ function renderStatus(isRunning, port) {
     var renderHTML;
     if (isRunning) {
         var button = String.format('&#160;<a class="btn cbi-button" href="http://%s:%s" target="_blank" rel="noreferrer noopener">%s</a>',
-                                   window.location.hostname, port, _('Open Web Interface'));
+                                   window.location.hostname, port, _('Open WebUI'));
         renderHTML = spanTemp.format('green', _('OpenList'), _('RUNNING')) + button;
     } else {
         renderHTML = spanTemp.format('red', _('OpenList'), _('NOT RUNNING'));
@@ -87,7 +87,7 @@ return view.extend({
         o.datatype = 'port';
         o.placeholder = '5244';
 
-        o = s.option(form.Flag, 'tls_enabled', _('Enable TLS'));
+        o = s.option(form.Flag, 'tls_enabled', _('Enable TLS'), _('Clicking the OpenWebUI button may result in the certificate not being trusted.'));
         o.rmempty = false;
 
         o = s.option(form.Value, 'https_port', _('HTTPS Listen Port'));

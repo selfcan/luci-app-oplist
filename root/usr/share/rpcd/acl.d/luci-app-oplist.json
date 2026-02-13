@@ -1,6 +1,6 @@
 {
 	"luci-app-oplist": {
-		"description": "Grant ACL access for OpenList App",
+		"description": "ACL file of luci-app-oplist",
 		"read": {
 			"cgi-io": [ "download" ],
 			"file": {

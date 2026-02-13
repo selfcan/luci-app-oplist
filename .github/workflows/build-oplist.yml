@@ -4,7 +4,6 @@ on:
   schedule:
     - cron: '0 0 28 * *'
   workflow_dispatch:
-  push:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,8 +25,8 @@ jobs:
       - name: install env
         if: steps.check_upstream.outputs.status == 'go'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential libncurses5-dev libncursesw5-dev \
+          sudo apt update
+          sudo apt install -y build-essential libncurses5-dev libncursesw5-dev \
             zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip zstd
 
       - name: download source code
@@ -53,11 +52,6 @@ jobs:
         run: |
           cd immortalwrt-sdk-24.10.4-x86-64_gcc-13.3.0_musl.Linux-x86_64
           rm -f package/luci-app-oplist/root/etc/openlist/DONOTREMOVE
-          cd package/luci-app-oplist
-          NEW_RELEASE=$(date +%s)
-          sed -i "s/PKG_RELEASE:=.*/PKG_RELEASE:=${NEW_RELEASE}/g" ./Makefile
-          echo "Makefile updated, PKG_RELEASE now is : ${NEW_RELEASE}"
-          cd ../../
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           make defconfig
