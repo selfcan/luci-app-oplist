@@ -1,13 +1,13 @@
 # luci-app-oplist
 LuCI-APP for OpenList, which includes the latest version of the openlist binary program.
 
-Open Source by GNU GPL v3
-
-References: luci-app-openlist, luci-app-powermanager
-
-Built-in: OpenList binary
-
-WARN: Only support X86_64(amd64) ARCH !!!
+> WARN: Only support X86_64(amd64) ARCH !!!
+>
+> Open Source : GNU GPL v3
+>
+> References: luci-app-openlist, luci-app-powermanager
+>
+> Built-in: OpenList binary
 ## How to build?
 > General tutorials : [Here](https://github.com/mokanove/mokanove/tree/main/luci-app)
 ## Clone source code
