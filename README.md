@@ -14,7 +14,7 @@ LuCI-APP for OpenList, which includes the latest version of the openlist binary 
 > General tutorials : [Here](https://github.com/mokanove/mokanove/tree/main/luci-app)
 ## Clone source code
 ```
-Do it yourself.
+Do it youself.
 ```
 ## Init project
 ```
