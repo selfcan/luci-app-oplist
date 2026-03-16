@@ -51,6 +51,7 @@ jobs:
           sdk_name: ${{ matrix.sdk_name }}
 
       - name: Clone Project source code & Get Version & Change Arch
+        id: get_version
         run: |
           cd ${{ matrix.sdk_name }}/package/
           git clone https://github.com/mokanove/luci-app-oplist.git
@@ -76,7 +77,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@master
         with:
-          tag_name: ${{ steps.check_upstream.outputs.tag }}
+          tag_name: V${{ steps.get_version.outputs.version }}
           files: |
               ${{ matrix.sdk_name }}/bin/packages/*/base/*.${{ matrix.ext }}
           body: |
