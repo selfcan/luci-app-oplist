@@ -59,6 +59,7 @@ jobs:
           VERSION=$(grep -E "^PKG_VERSION[[:space:]]*:=" Makefile | sed -E 's/.*:=[[:space:]]*//' | tr -d '[:space:]')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           if [ "${{ matrix.needs_patch }}" == "true" ]; then
+            sleep 600
             sed -i 's/x86_64/aarch64_generic/g' Makefile
           fi
           cd root/usr/bin/
@@ -86,6 +87,6 @@ jobs:
             ## Please note:
             > APK files do not specify the architecture in their filenames.
             >
-            > Therefore, please refer to the timestamps; the later timestamps are for aarch64_rockchip devices, and the earlier timestamps are for x86_64 devices.
+            > Therefore, please refer to the timestamps; the later timestamps are for X86_64 devices, and the earlier timestamps are for aarch64_rockchip devices.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
