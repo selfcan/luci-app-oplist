@@ -49,7 +49,7 @@ jobs:
 
           cd root/usr/bin/
           rm DONOTREMOVE
-          curl -LO "https://github.com/OpenListTeam/OpenList/releases/download/v4.1.10/openlist-linux-musl-${{ matrix.openlist_arch }}.tar.gz"
+          curl -LO "https://github.com/OpenListTeam/OpenList/releases/download/v4.2.0/openlist-linux-musl-${{ matrix.openlist_arch }}.tar.gz"
           tar -xzvf *.tar.gz
           rm -f *.tar.gz DONOTREMOVE
           cd ../../etc/openlist
@@ -72,7 +72,6 @@ jobs:
           body: |
             # 🚀 Release Notes
             ### ✨ Change Logs
-            - **External Updates**: The content of the action and Makefile has been optimized.
-            - **LuCI Updates**: Log page logic updated.
+            - **Binary Updates**: Upgraded OpenList version to 4.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
