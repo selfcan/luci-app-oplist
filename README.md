@@ -9,14 +9,8 @@
 - **Intuitive WebUI**:It's as simple as running OpenList in Linux CLI.
 
 ## 📦 Install
-There is **very simple**:
-- **Download**: Turnning to [Releases](https://github.com/mokanove/luci-app-oplist/releases) download .apk package on your router.
-- **Install**:
-```
-apk add --allow-untrusted /path/of/your/.apk
-```
-- **Done**: You can see the OpenList option directly in the LuCI, located under the Services field.
-
+[Releases](https://github.com/mokanove/luci-app-oplist/releases)
+[Generic Guide](https://867678.xyz/install-iapk)
 ## 🛠 How to build?
 > To initialize the SDK, please go to <https://867678.xyz/sdk>
 ```
