@@ -1,16 +1,42 @@
 # luci-app-oplist
-> LuCI-APP for OpenList, which includes the latest version of the openlist binary program.
+> LuCI support for OpenList
 >
-> Built-in: OpenList binary
-## How to build?
+> It is designed to solve the problem that the OpenList that comes with OpenWrt is too old.
+
+## 🚀 Features
+- **Built-in Binary**: The musl binary file of OpenList is packaged, bypassing the source that comes with OpenWrt.
+- **Full Control**:Support setting TLS, log storage location, etc. for OpenList in LuCI
+- **Intuitive WebUI**:It's as simple as running OpenList in Linux CLI.
+
+## 📦 Install
+There is **very simple**:
+- **Download**: Turnning to [Releases](https://github.com/mokanove/luci-app-oplist/releases) download .apk package on your router.
+- **Install**:
 ```
+apk add --allow-untrusted /path/of/your/.apk
+```
+- **Done**: You can see the OpenList option directly in the LuCI, located under the Services field.
+
+## 🛠 How to build?
+> To initialize the SDK, please go to <https://867678.xyz/sdk>
+```
+export VERSION=v4.2.0
+export ARCH=amd64
+# ↑ Environment variables
 cd ./luci-app-oplist/root/usr/bin
-curl -LO https://github.com/OpenListTeam/OpenList/releases/download/v4.2.0/openlist-linux-musl-amd64.tar.gz
-# or another openlist binary URL
-tar -xzvf openlist-linux-musl-amd64.tar.gz
-rm -f openlist-linux-musl-amd64.tar.gz DONOTREMOVE
+curl -LO https://github.com/OpenListTeam/OpenList/releases/download/${VERSION}/openlist-linux-musl-${ARCH}.tar.gz
+tar -xzvf openlist-linux-musl-${ARCH}.tar.gz
+rm -f openlist-linux-musl-${ARCH}.tar.gz DONOTREMOVE
 cd ../../etc/openlist
 rm DONOTREMOVE
-cd ../../../../../
 ```
-> Please change amd64 to your arch.
+> In summary: Download and extract the openlist-musl binary and place it in the root/usr/bin & root/etc/openlist  directory, then remove DONOTREMOVE from that directory.
+
+## Endnote
+> We have included the OpenList binary, which is developed by OpenListTeam and based on the AGPL-3.0 open source.
+>
+> The log shows a partial quote: <https://github.com/Internet1235/luci-app-openlist/blob/main/luci-app-openlist/htdocs/luci-static/resources/view/openlist/log.js> With Apache-2.0 License
+> 
+> The other parts are open source under the GNU General Public License, version 3.
+>
+> This application provides no warranties.

@@ -58,6 +58,9 @@ msgstr "临时上传和下载文件缓存目录"
 msgid "Logs"
 msgstr "日志"
 
+msgid "Collecting data..."
+msgstr "收集数据中..."
+
 msgid "Log is empty."
 msgstr "日志是空的"
 

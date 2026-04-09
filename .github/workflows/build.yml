@@ -1,4 +1,4 @@
-name : jong chong!
+name : Fuck pkg source & luci-app-openlist
 
 on:
   push:
@@ -7,18 +7,16 @@ permissions:
   contents: write
 jobs:
   build:
-    name: Build (${{ matrix.version }}-${{ matrix.openlist_arch }})
+    name: Build for ${{ matrix.patch_arch }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - version: "25.12.0-rc1"
-            openlist_arch: "amd64"
-            patch_arch: "X86_64"
+          - openlist_arch: "amd64"
+            patch_arch: "x86_64"
             sdk_name: "immortalwrt-sdk-25.12.0-rc1-x86-64_gcc-14.3.0_musl.Linux-x86_64"
-          - version: "25.12.0-rc1"
-            openlist_arch: "arm64"
+          - openlist_arch: "arm64"
             patch_arch: "aarch64_generic"
             sdk_name: "immortalwrt-sdk-25.12.0-rc1-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
 
@@ -43,7 +41,7 @@ jobs:
           VERSION=$(grep -E "^PKG_VERSION[[:space:]]*:=" Makefile | sed -E 's/.*:=[[:space:]]*//' | tr -d '[:space:]')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-          if [ "${{ matrix.patch_arch }}" != "X86_64" ]; then
+          if [ "${{ matrix.patch_arch }}" != "x86_64" ]; then
             sed -i 's/x86_64/${{ matrix.patch_arch }}/g' Makefile
           fi
 
@@ -61,7 +59,7 @@ jobs:
           make package/luci-app-oplist/compile V=s -j$(nproc)
 
           cd bin/packages/*/base/
-          mv luci-app-oplist* luci-app-oplist-${{ steps.get_version.outputs.version }}-${{ matrix.openlist_arch }}.apk
+          mv luci-app-oplist* luci-app-oplist-${{ steps.get_version.outputs.version }}-${{ matrix.patch_arch }}.apk
 
       - name: Release
         uses: softprops/action-gh-release@master
@@ -72,6 +70,6 @@ jobs:
           body: |
             # 🚀 Release Notes
             ### ✨ Change Logs
-            - **Binary Updates**: Upgraded OpenList version to 4.2.0
+            - **Style Updates**: Upgraded README.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
