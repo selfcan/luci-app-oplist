@@ -29,8 +29,6 @@ function renderStatus(isRunning, port) {
     var spanTemp = '<span style="color:%s"><strong>%s %s</strong></span>';
     var renderHTML;
     if (isRunning) {
-        var button = String.format('&#160;<a class="btn cbi-button" href="http://%s:%s" target="_blank" rel="noreferrer noopener">%s</a>',
-                                   window.location.hostname, port, _('Open WebUI'));
         renderHTML = spanTemp.format('green', _('OpenList'), _('RUNNING')) + button;
     } else {
         renderHTML = spanTemp.format('red', _('OpenList'), _('NOT RUNNING'));
@@ -59,9 +57,8 @@ return view.extend({
         var webport = uci.get(data[0], 'main', 'port') || '5244';
 
         m = new form.Map('oplist', _('OpenList'),
-                         _('A file list program powered by Gin and Solidjs.') .. '<br>' ..
-                         _('Default username: admin ; Default password: password') .. '<br>' ..
-                         _('If it does not start, please manually execute /etc/init.d/oplist restart')
+            _('A file list program powered by Gin and Solidjs.') + '<br>' +
+            _('Default username: admin ; Default password: password')
         );
 
         s = m.section(form.TypedSection);
