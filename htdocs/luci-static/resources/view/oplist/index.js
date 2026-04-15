@@ -29,7 +29,7 @@ function renderStatus(isRunning, port) {
     var spanTemp = '<span style="color:%s"><strong>%s %s</strong></span>';
     var renderHTML;
     if (isRunning) {
-        renderHTML = spanTemp.format('green', _('OpenList'), _('RUNNING')) + button;
+        renderHTML = spanTemp.format('green', _('OpenList'), _('RUNNING'));
     } else {
         renderHTML = spanTemp.format('red', _('OpenList'), _('NOT RUNNING'));
     }

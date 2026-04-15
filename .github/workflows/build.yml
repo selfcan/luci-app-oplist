@@ -69,6 +69,6 @@ jobs:
               ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - Restore Makefile
+            - Delete **+button** and now no problem.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

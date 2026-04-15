@@ -8,7 +8,7 @@
 		"order": 99
 	},
 	"admin/services/oplist/config": {
-		"title": "Settings",
+		"title": "Config",
 		"order": 1,
 		"action": {
 			"type": "view",
