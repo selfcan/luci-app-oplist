@@ -15,10 +15,10 @@ jobs:
         include:
           - openlist_arch: "amd64"
             patch_arch: "x86_64"
-            sdk_name: "immortalwrt-sdk-25.12.0-rc1-x86-64_gcc-14.3.0_musl.Linux-x86_64"
+            sdk_name: "immortalwrt-sdk-25.12.0-rc2-x86-64_gcc-14.3.0_musl.Linux-x86_64"
           - openlist_arch: "arm64"
             patch_arch: "aarch64_generic"
-            sdk_name: "immortalwrt-sdk-25.12.0-rc1-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
+            sdk_name: "immortalwrt-sdk-25.12.0-rc2-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
 
     steps:
       - name: Checkout Code
@@ -69,6 +69,6 @@ jobs:
               ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - I don't know what can i say.
+            - Upgraded SDK to 25.12.0-rc2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
