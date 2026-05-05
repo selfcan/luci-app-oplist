@@ -3,9 +3,6 @@
 		"description": "ACL file for luci-app-oplist",
 		"read": {
 			"cgi-io": [ "download" ],
-			"file": {
-				"/etc/openlist/log/log.log": [ "read" ]
-			},
 			"uci": [ "oplist" ],
 			"ubus": {
 				"service": [ "list" ],
@@ -13,9 +10,6 @@
 			}
 		},
 		"write": {
-			"file": {
-				"/etc/openlist/log/log.log": [ "write" ]
-			},
 			"uci": [ "oplist" ],
 			"ubus": {
 				"service": [ "list" ],

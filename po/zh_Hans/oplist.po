@@ -64,17 +64,8 @@ msgstr "日志文件不存在"
 msgid "Unknown error"
 msgstr "未知错误"
 
-msgid "Clear Log"
-msgstr "清除日志"
-
-msgid "Are you sure you want to delete the log file?"
-msgstr "你希望删除日志吗？"
-
-msgid "Log file deleted successfully."
-msgstr "日志删除成功"
-
-msgid "Failed to delete log file:"
-msgstr "删除日志失败 原因："
+msgid "To clear the log, please use: "
+msgstr "希望清除日志，请使用："
 
 msgid "Refresh every 5 seconds."
 msgstr "每5秒刷新一次"

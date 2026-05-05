@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
-// Changed from https://github.com/Internet1235/luci-app-openlist/blob/main/luci-app-openlist/htdocs/luci-static/resources/view/openlist/log.js
 'use strict';
 'require dom';
 'require fs';
 'require poll';
 'require uci';
 'require view';
-'require ui';
 
 return view.extend({
     render: function() {
@@ -24,9 +22,6 @@ return view.extend({
     overflow-y: auto;           \
     background: #f4f4f4;        \
     border: 1px solid #ccc;     \
-    }                               \
-    .description {                  \
-    background-color: #33ccff;  \
     }';
 
     var log_textarea = E('div', { 'id': 'log_textarea' },
@@ -55,30 +50,19 @@ return view.extend({
         });
     }));
 
-    var handleClearLog = function(ev) {
-        if (!confirm(_('Are you sure you want to delete the log file?')))
-            return;
-
-        return fs.exec('/bin/rm', ['/etc/openlist/log/log.log']).then(function() {
-            ui.addNotification(null, E('p', _('Log file deleted successfully.')), 'info');
-            dom.content(log_textarea, E('pre', { 'wrap': 'pre' }, [ _('Log is empty.') ]));
-        }).catch(function(err) {
-            ui.addNotification(null, E('p', _('Failed to delete log file: %s').format(err)), 'danger');
-        });
-    };
-
     return E([
         E('style', [ css ]),
              E('div', {'class': 'cbi-map'}, [
                  E('div', {'class': 'cbi-section'}, [
                      log_textarea,
-                   E('div', {'style': 'display: flex; justify-content: space-between; align-items: center; margin-top: 10px;'}, [
-                       E('button', {
-                           'class': 'btn cbi-button-remove',
-                           'click': ui.createHandlerFn(this, handleClearLog)
-                       }, [ _('Clear Log') ]),
-                     E('small', {}, _('Refresh every 5 seconds.'))
-                   ])
+                     E('div', {'style': 'display: flex; justify-content: space-between; align-items: center; margin-top: 10px; color: #666;'}, [
+                         E('span', {}, [
+                             E('strong', {}, _('Note: ')),
+                           _('To clear the log, please use: '),
+                           E('code', { 'style': 'background:#eee; padding:2px 4px; border-radius:3px;' }, 'rm /etc/openlist/log/log.log')
+                         ]),
+                         E('small', {}, _('Refresh every 5 seconds.'))
+                     ])
                  ])
              ])
     ]);
