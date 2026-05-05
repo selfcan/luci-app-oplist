@@ -57,7 +57,6 @@ return view.extend({
                      log_textarea,
                      E('div', {'style': 'display: flex; justify-content: space-between; align-items: center; margin-top: 10px; color: #666;'}, [
                          E('span', {}, [
-                             E('strong', {}, _('Note: ')),
                            _('To clear the log, please use: '),
                            E('code', { 'style': 'background:#eee; padding:2px 4px; border-radius:3px;' }, 'rm /etc/openlist/log/log.log')
                          ]),

@@ -64,7 +64,7 @@ msgstr "日志文件不存在"
 msgid "Unknown error"
 msgstr "未知错误"
 
-msgid "To clear the log, please use: "
+msgid "To clear the log, please use:"
 msgstr "希望清除日志，请使用："
 
 msgid "Refresh every 5 seconds."
