@@ -5,14 +5,21 @@
 ## 🚀 Features
 - The musl binary file of OpenList is packaged, bypassing the older binary with OpenWrt.
 - Support setting TLS, log storage location, etc. for OpenList in LuCI.
-## UI Screenshot
-![Config](./images/屏幕截图_20260510_200516.png)
-![Logs](./images/屏幕截图_20260510_200536.png)
 ## ⚠️ Compatibility
 - It only supports ImmortalWrt 25.12.0-rc2 or later.
 - It is not guaranteed that it can be used on non-x86_64(amd64) and non-aarch64(arm64) architectures.
 ## 🛠 How to build?
-[Generic Docs](https://867678.xyz/doc-build)
+[Generic Docs](https://867678.xyz/)
+> Additional notes:
+```
+cd sdk-root/package/luci-app-oplist/root/usr/bin/
+rm DONOTREMOVE
+curl -LO "https://github.com/OpenListTeam/OpenList/releases/download/v⚠️Here are OpenList Version/openlist-linux-musl-⚠️Here are your router cpu arch.tar.gz"
+tar -xzvf *.tar.gz
+rm -f *.tar.gz DONOTREMOVE
+cd ../../etc/openlist
+rm DONOTREMOVE
+```
 ## ⚖️ License
 > We have included the OpenList binary, which is developed by OpenListTeam and based on the AGPL-3.0 open source.
 >
