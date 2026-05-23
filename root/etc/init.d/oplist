@@ -16,7 +16,7 @@ patch_val() {
     if [ "$is_str" -eq 1 ]; then
         sed -i "s|\"$key\": *\"[^\"]*\"|\"$key\": \"$val\"|g" "$CONF_FILE"
     else
-        sed -i "s|\"$key\": *[a-zA-Z0-9\.-]*|\"$key\": $val|g" "$CONF_FILE"
+        sed -i "s|\"$key\": *[^,}]*|\"$key\": $val|g" "$CONF_FILE"
     fi
 }
 
@@ -49,7 +49,7 @@ start_service() {
     config_get https_p main https_port "443"
     config_get cert main tls_cert ""
     config_get key main tls_key ""
-    config_get_bool h3_en main h3_enabled 0
+    config_get_bool h3_en main h3_enable 0
     config_get expire main site_login_expire "48"
     config_get conn main site_max_connections "0"
     config_get_bool log_en main log_enable 1
