@@ -1,5 +1,5 @@
 # luci-app-oplist
-- LuCI support for OpenList
+LuCI support for OpenList
 ## ⬇️ Downloads
 [GitHub Release](https://github.com/mokanove/luci-app-oplist/releases)
 ## 🚀 Features
