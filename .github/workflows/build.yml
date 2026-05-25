@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       project_name: "luci-app-oplist"
-      openlist_version: "4.2.1"
+      openlist_version: "4.2.2"
     strategy:
       fail-fast: false
       matrix:
