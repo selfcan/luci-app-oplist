@@ -23,8 +23,8 @@ cd ../../etc/openlist
 rm DONOTREMOVE
 ```
 ## ⚖️ License
-> This application by [Mo Public License](https://github.com/mokanove/mokanove/blob/main/docs/license.md)
+> This application is licensed under the [GNU Affero General Public License Version 3 (AGPL-3.0)](https://www.gnu.org/licenses/agpl-3.0.html).
 > 
-> We have included the OpenList binary, which is developed by OpenListTeam and based on the AGPL-3.0 open source.[This OpenList](https://github.com/OpenListTeam/OpenList)
+> We have included the [OpenList](https://github.com/OpenListTeam/OpenList) binary, which is developed by OpenListTeam and based on the AGPL-3.0 open source.
 >
 > The log shows a partial quote: <https://github.com/Internet1235/luci-app-openlist/blob/main/luci-app-openlist/htdocs/luci-static/resources/view/openlist/log.js> With Apache-2.0 License
