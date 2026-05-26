@@ -56,14 +56,67 @@ jobs:
             sed -i 's/x86_64/${{ matrix.patch_arch }}/g' ./Makefile
           fi
 
+      - name: Setup Node.js
+        uses: actions/setup-node@main
+        with:
+          node-version: '26'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@master
+        with:
+          version: '11.3'
+
+      - name: Set up Go
+        uses: actions/setup-go@main
+        with:
+          go-version: '1.26.3'
+          cache: true
+
+      - name: Build OpenList Front-End
+        shell: bash
+        run: |
+          git clone --depth 1 https://github.com/OpenListTeam/OpenList-Frontend.git frontend-src
+          cd frontend-src
+          pnpm install
+          pnpm build
+
+      - name: Build OpenList Binary
+        shell: bash
+        run: |
+          git clone --depth 1 https://github.com/OpenListTeam/OpenList.git backend-src
+
+          mkdir -p backend-src/public
+          cp -r frontend-src/dist/* backend-src/public/
+          cd backend-src
+
+          builtAt="$(date +'%F %T %z')"
+          goVersion=$(go version | sed 's/go version //')
+          gitAuthor=$(git show -s --format='format:%aN <%ae>' HEAD)
+          gitCommit=$(git log --pretty=format:"%h" -1)
+          version=$(git describe --long --tags --dirty --always)
+
+          webVersion=$(curl -s --max-time 5 "https://api.github.com/repos/OpenListTeam/OpenList-Frontend/releases/latest" -L | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
+          if [ -z "$webVersion" ]; then
+              webVersion="0.0.0"
+          fi
+
+          ldflags="-w -s \
+            -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.BuiltAt=$builtAt' \
+            -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.GoVersion=$goVersion' \
+            -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=$gitAuthor' \
+            -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.GitCommit=$gitCommit' \
+            -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.Version=$version' \
+            -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=$webVersion'"
+          GOOS=linux GOARCH=${{ matrix.openlist_arch }} CGO_ENABLED=0 go build -ldflags "$ldflags" -o openlist .
+          chmod +x openlist
+          mv ./openlist "$GITHUB_WORKSPACE/openlist"
+
       - name: Preparation before compilation
         shell: bash
         run: |
           cd ${{ matrix.sdk_name }}/package/${{ env.project_name }}/root/usr/bin/
-          rm DONOTREMOVE
-          curl -LO "https://github.com/OpenListTeam/OpenList/releases/download/v${{ env.openlist_version }}/openlist-linux-musl-${{ matrix.openlist_arch }}.tar.gz"
-          tar -xzvf *.tar.gz
-          rm -f *.tar.gz DONOTREMOVE
+          rm -f DONOTREMOVE
+          mv "$GITHUB_WORKSPACE/openlist" ./
           cd ../../etc/openlist
           rm DONOTREMOVE
 
@@ -86,6 +139,7 @@ jobs:
           files: ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - Updated OpenList Version to 4.2.2
+            - Maybe fixed permission denide
+            - Change OpenList Go version to 1.26.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
