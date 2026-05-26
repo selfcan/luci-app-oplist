@@ -85,8 +85,8 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/OpenListTeam/OpenList.git backend-src
 
-          mkdir -p backend-src/public
-          cp -r frontend-src/dist/* backend-src/public/
+          mkdir -p backend-src/public/dist
+          cp -r frontend-src/dist/* backend-src/public/dist/
           cd backend-src
 
           builtAt="$(date +'%F %T %z')"
@@ -108,6 +108,7 @@ jobs:
             -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.Version=$version' \
             -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=$webVersion'"
           GOOS=linux GOARCH=${{ matrix.openlist_arch }} CGO_ENABLED=0 go build -ldflags "$ldflags" -o openlist .
+
           chmod +x openlist
           mv ./openlist "$GITHUB_WORKSPACE/openlist"
 
@@ -139,7 +140,6 @@ jobs:
           files: ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - Maybe fixed permission denide
-            - Change OpenList Go version to 1.26.3
+            - Maybe fixed **[31mFATA[0m[2026-05-26 07:29:39] index.html not exist, you may forget to put dist of frontend to public/dist**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
