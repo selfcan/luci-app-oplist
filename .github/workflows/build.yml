@@ -85,9 +85,8 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/OpenListTeam/OpenList.git backend-src
 
-          mkdir -p backend-src/public/dist
-          cp -r frontend-src/dist/* backend-src/public/dist/
           cd backend-src
+          bash build.sh dev web
 
           builtAt="$(date +'%F %T %z')"
           goVersion=$(go version | sed 's/go version //')
@@ -140,6 +139,6 @@ jobs:
           files: ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - Maybe fixed FATAL:index.html not exist, you may forget to put dist of frontend to public/dist
+            - Maybe fixed 后台不显示中文
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
