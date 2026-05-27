@@ -64,7 +64,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@master
         with:
-          version: '11.3'
+          version: '11.4'
 
       - name: Set up Go
         uses: actions/setup-go@main
@@ -139,6 +139,6 @@ jobs:
           files: ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - Upgrade OpenList binary to commit 4c77b9c
+            - Upgrade pnpm version to 11.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
