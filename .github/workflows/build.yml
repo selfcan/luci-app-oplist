@@ -59,7 +59,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@main
         with:
-          node-version: '26'
+          node-version: '26.2.0'
 
       - name: Install pnpm
         uses: pnpm/action-setup@master
@@ -96,7 +96,7 @@ jobs:
 
           webVersion=$(curl -s --max-time 5 "https://api.github.com/repos/OpenListTeam/OpenList-Frontend/releases/latest" -L | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
           if [ -z "$webVersion" ]; then
-              webVersion="0.0.0"
+              webVersion="${{ steps.get_version.outputs.version }}"
           fi
 
           ldflags="-w -s \
@@ -139,6 +139,6 @@ jobs:
           files: ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - Maybe fixed 后台不显示中文
+            - Upgrade OpenList binary to commit 4c77b9c
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
