@@ -63,7 +63,7 @@ jobs:
           node-version: '26.2.0'
           cache: true
 
-      - name: Install pnpm
+      - name: Set up pnpm
         uses: pnpm/action-setup@master
         with:
           version: '11.5'
