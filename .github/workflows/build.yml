@@ -64,7 +64,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@master
         with:
-          version: '11.4'
+          version: '11.5'
 
       - name: Set up Go
         uses: actions/setup-go@main
@@ -139,6 +139,6 @@ jobs:
           files: ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - Upgrade pnpm version to 11.4
+            - Upgrade pnpm version to 11.5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
