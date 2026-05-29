@@ -1,4 +1,4 @@
-name : I wanna say goodbye ye yeyeyeye
+name : I only smoke when i drink
 
 on:
   push:
@@ -43,6 +43,7 @@ jobs:
 
       - name: Get Version
         id: get_version
+        shell: bash
         run: |
           cd ${{ matrix.sdk_name }}/package/${{ env.project_name }}
           VERSION=$(grep -E "^PKG_VERSION[[:space:]]*:=" Makefile | sed -E 's/.*:=[[:space:]]*//' | tr -d '[:space:]')
@@ -56,15 +57,17 @@ jobs:
             sed -i 's/x86_64/${{ matrix.patch_arch }}/g' ./Makefile
           fi
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@main
         with:
           node-version: '26.2.0'
+          cache: true
 
       - name: Install pnpm
         uses: pnpm/action-setup@master
         with:
           version: '11.5'
+          cache: true
 
       - name: Set up Go
         uses: actions/setup-go@main
