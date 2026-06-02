@@ -17,10 +17,10 @@ jobs:
         include:
           - openlist_arch: "amd64"
             patch_arch: "x86_64"
-            sdk_name: "openwrt-sdk-25.12.4-x86-64_gcc-14.3.0_musl.Linux-x86_64"
+            sdk_name: "openwrt-sdk-x86-64_gcc-14.3.0_musl.Linux-x86_64"
           - openlist_arch: "arm64"
             patch_arch: "aarch64_generic"
-            sdk_name: "openwrt-sdk-25.12.4-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
+            sdk_name: "openwrt-sdk-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
 
     steps:
       - name: Checkout
@@ -29,15 +29,7 @@ jobs:
       - name: Install Build Environment
         uses: mokanove/mokanove/actions/luci-env@main
 
-      - name: Cache OpenWrt SDK
-        id: cache-sdk
-        uses: actions/cache@main
-        with:
-          path: ${{ matrix.sdk_name }}
-          key: ${{ matrix.sdk_name }}
-
       - name: Prepare OpenWrt SDK
-        if: steps.cache-sdk.outputs.cache-hit != 'true'
         uses: mokanove/mokanove/actions/prepare-sdk@main
         with:
           sdk_name: ${{ matrix.sdk_name }}
@@ -152,6 +144,6 @@ jobs:
           files: ${{ matrix.sdk_name }}/bin/packages/**/*.apk
           body: |
             # 📝 Release Notes
-            - Upgrade pnpm version to 11.5.1
+            - Upgrade SDK to SNAPSHOT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
