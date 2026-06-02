@@ -24,10 +24,10 @@ jobs:
             sdk_name: "openwrt-sdk-25.12.4-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
 
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@main
 
-      - name: Install Build Dependencies
+      - name: Install Build Environment
         uses: mokanove/mokanove/actions/luci-env@main
 
       - name: Cache OpenWrt SDK
@@ -37,19 +37,19 @@ jobs:
           path: ${{ matrix.sdk_name }}
           key: ${{ runner.os }}-${{ matrix.sdk_name }}
 
-      - name: Prepare SDK
+      - name: Prepare OpenWrt SDK
         if: steps.cache-sdk.outputs.cache-hit != 'true'
         uses: mokanove/mokanove/actions/prepare-sdk@main
         with:
           sdk_name: ${{ matrix.sdk_name }}
 
-      - name: Clone Source Code
+      - name: Clone APP Code
         uses: mokanove/mokanove/actions/clone@main
         with:
           sdk_name: ${{ matrix.sdk_name }}
           project_name: ${{ env.project_name }}
 
-      - name: Get Version
+      - name: Get APP Version
         id: get_version
         shell: bash
         run: |
@@ -57,7 +57,7 @@ jobs:
           VERSION=$(grep -E "^PKG_VERSION[[:space:]]*:=" Makefile | sed -E 's/.*:=[[:space:]]*//' | tr -d '[:space:]')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Change Arch
+      - name: Change APP Arch
         shell: bash
         run: |
           cd ${{ matrix.sdk_name }}/package/${{ env.project_name }}
