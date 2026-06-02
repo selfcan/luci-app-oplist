@@ -65,19 +65,11 @@ jobs:
         uses: pnpm/action-setup@master
         with:
           version: latest
-
-      - name: Clone OpenList Backend
-        shell: bash
-        run: |
-          git clone --depth 1 https://github.com/OpenListTeam/OpenList.git backend-src
-
+          
       - name: Set up Go
         uses: actions/setup-go@main
         with:
           go-version: 'stable'
-          cache: true
-          check-latest: true
-          cache-dependency-path: backend-src/go.sum
 
       - name: Build OpenList Front-End
         shell: bash
@@ -90,6 +82,7 @@ jobs:
       - name: Build OpenList Binary
         shell: bash
         run: |
+          git clone --depth 1 https://github.com/OpenListTeam/OpenList.git backend-src
           cd backend-src
           bash build.sh dev web
 
@@ -145,5 +138,6 @@ jobs:
           body: |
             # 📝 Release Notes
             - Upgrade SDK to SNAPSHOT
+            - Remove Go cache
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
