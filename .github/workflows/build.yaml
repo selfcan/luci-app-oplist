@@ -35,7 +35,7 @@ jobs:
         uses: actions/cache@main
         with:
           path: ${{ matrix.sdk_name }}
-          key: ${{ runner.os }}-${{ matrix.sdk_name }}
+          key: ${{ matrix.sdk_name }}
 
       - name: Prepare OpenWrt SDK
         if: steps.cache-sdk.outputs.cache-hit != 'true'
