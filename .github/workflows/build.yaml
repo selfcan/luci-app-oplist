@@ -30,7 +30,15 @@ jobs:
       - name: Install Build Dependencies
         uses: mokanove/mokanove/actions/luci-env@main
 
+      - name: Cache OpenWrt SDK
+        id: cache-sdk
+        uses: actions/cache@main
+        with:
+          path: ${{ matrix.sdk_name }}
+          key: ${{ runner.os }}-${{ matrix.sdk_name }}
+
       - name: Prepare SDK
+        if: steps.cache-sdk.outputs.cache-hit != 'true'
         uses: mokanove/mokanove/actions/prepare-sdk@main
         with:
           sdk_name: ${{ matrix.sdk_name }}
@@ -67,11 +75,18 @@ jobs:
         with:
           version: latest
 
+      - name: Clone OpenList Backend
+        shell: bash
+        run: |
+          git clone --depth 1 https://github.com/OpenListTeam/OpenList.git backend-src
+
       - name: Set up Go
         uses: actions/setup-go@main
         with:
-          go-version: latest
+          go-version: 'stable'
           cache: true
+          check-latest: true
+          cache-dependency-path: backend-src/go.sum
 
       - name: Build OpenList Front-End
         shell: bash
@@ -84,8 +99,6 @@ jobs:
       - name: Build OpenList Binary
         shell: bash
         run: |
-          git clone --depth 1 https://github.com/OpenListTeam/OpenList.git backend-src
-
           cd backend-src
           bash build.sh dev web
 
