@@ -15,10 +15,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - openlist_arch: "amd64"
+          - tags: "CGO_ENABLED=0"
             patch_arch: "x86_64"
             sdk_name: "openwrt-sdk-x86-64_gcc-14.3.0_musl.Linux-x86_64"
-          - openlist_arch: "arm64"
+          - tags: "GOARCH=arm64"
             patch_arch: "aarch64_generic"
             sdk_name: "openwrt-sdk-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
 
@@ -104,7 +104,7 @@ jobs:
             -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.GitCommit=$gitCommit' \
             -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.Version=$version' \
             -X 'github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=$webVersion'"
-          GOOS=linux GOARCH=${{ matrix.openlist_arch }} CGO_ENABLED=0 go build -ldflags "$ldflags" -o openlist .
+          ${{ matrix.tags }} go build -ldflags "$ldflags" -o openlist .
 
           chmod +x openlist
           mv ./openlist "$GITHUB_WORKSPACE/openlist"
@@ -127,7 +127,7 @@ jobs:
       - name: Rename compilation files
         shell: bash
         run: |
-          mv ${{ matrix.sdk_name }}/bin/packages/*/base/luci-app* $GITHUB_WORKSPACE/luci-app-oplist-${{ steps.get_version.outputs.version }}-${{ matrix.patch_arch }}.apk
+          mv ${{ matrix.sdk_name }}/bin/packages/*/base/luci-app* luci-app-oplist-${{ steps.get_version.outputs.version }}-${{ matrix.patch_arch }}.apk
           mv ${{ matrix.sdk_name }}/package/${{ env.project_name }}/root/usr/bin/openlist $GITHUB_WORKSPACE/openlist-${{ matrix.openlist_arch }}
 
       - name: Release
@@ -136,10 +136,10 @@ jobs:
           tag_name: V${{ steps.get_version.outputs.version }}
           files: |
             ${{ matrix.sdk_name }}/bin/packages/**/*.apk
-            ${{ github.workspace }}/*.apk
             ${{ github.workspace }}/openlist-${{ matrix.openlist_arch }}
           body: |
             # 📝 Release Notes
-            - Fixed some action problems
+            - Optimize translation files.
+            - Action file optimization.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
