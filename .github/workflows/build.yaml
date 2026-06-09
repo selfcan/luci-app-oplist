@@ -109,7 +109,7 @@ jobs:
       - name: Build!
         shell: bash
         run: |
-          cd ${{ env.sdk_name }}
+          cd ${{ matrix.sdk_name }}
           make package/${{ env.project_name }}/compile V=s -j$(nproc)
 
       - name: Rename compilation files
