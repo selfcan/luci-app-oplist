@@ -25,36 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
-
-      - name: Preparing build environment
-        uses: mokanove/mokanove/actions/build-env@main
-
-      - name: Prepare SDK
-        uses: mokanove/mokanove/actions/prepare-sdk@main
         with:
-          sdk_name: ${{ matrix.sdk_name }}
-
-      - name: Clone Source Code
-        uses: mokanove/mokanove/actions/clone@main
-        with:
-          sdk_name: ${{ matrix.sdk_name }}
-          project_name: ${{ env.project_name }}
-
-      - name: Get Version
-        id: get_version
-        shell: bash
-        run: |
-          cd ${{ matrix.sdk_name }}/package/${{ env.project_name }}
-          VERSION=$(grep -E "^PKG_VERSION[[:space:]]*:=" Makefile | sed -E 's/.*:=[[:space:]]*//' | tr -d '[:space:]')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Change Arch
-        shell: bash
-        run: |
-          cd ${{ matrix.sdk_name }}/package/${{ env.project_name }}
-          if [ "${{ matrix.patch_arch }}" != "x86_64" ]; then
-            sed -i 's/x86_64/${{ matrix.patch_arch }}/g' ./Makefile
-          fi
+          path: ${{ env.project_name }}
 
       - name: Set up Node.js
         uses: actions/setup-node@main
@@ -107,39 +79,54 @@ jobs:
           ${{ matrix.tags }} go build -ldflags "$ldflags" -o openlist .
 
           chmod +x openlist
-          mv ./openlist "$GITHUB_WORKSPACE/openlist"
+          mv ./openlist $GITHUB_WORKSPACE/openlist
+
+      - name: Preparing build environment
+        uses: mokanove/mokanove/actions/build-env@main
+
+      - name: Prepare SDK
+        uses: mokanove/mokanove/actions/prepare-sdk@main
+        with:
+          sdk_name: ${{ matrix.sdk_name }}
 
       - name: Preparation before compilation
+        id: get_version
         shell: bash
         run: |
-          cd ${{ matrix.sdk_name }}/package/${{ env.project_name }}/root/usr/bin/
+          mv ${{ env.project_name }} ${{ env.sdk_name }}/package/
+          cd ${{ matrix.sdk_name }}/package/${{ env.project_name }}/
+          if [ "${{ matrix.patch_arch }}" != "x86_64" ]; then
+            sed -i 's/x86_64/${{ matrix.patch_arch }}/g' ./Makefile
+          fi
+          VERSION=$(grep -E "^PKG_VERSION[[:space:]]*:=" Makefile | sed -E 's/.*:=[[:space:]]*//' | tr -d '[:space:]')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          cd root/usr/bin/
           rm -f DONOTREMOVE
-          mv "$GITHUB_WORKSPACE/openlist" ./
+          cp "$GITHUB_WORKSPACE/openlist" ./
           cd ../../etc/openlist
           rm DONOTREMOVE
 
       - name: Build!
-        uses: mokanove/mokanove/actions/build@main
-        with:
-          sdk_name: ${{ matrix.sdk_name }}
-          project_name: ${{ env.project_name }}
+        shell: bash
+        run: |
+          cd ${{ env.sdk_name }}
+          make package/${{ env.project_name }}/compile V=s -j$(nproc)
 
       - name: Rename compilation files
         shell: bash
         run: |
-          mv ${{ matrix.sdk_name }}/bin/packages/*/base/luci-app* luci-app-oplist-${{ steps.get_version.outputs.version }}-${{ matrix.patch_arch }}.apk
-          mv ${{ matrix.sdk_name }}/package/${{ env.project_name }}/root/usr/bin/openlist $GITHUB_WORKSPACE/openlist-${{ matrix.openlist_arch }}
+          mv ${{ matrix.sdk_name }}/bin/packages/*/base/*.apk luci-app-oplist-${{ steps.get_version.outputs.version }}-${{ matrix.patch_arch }}.apk
+          mv openlist openlist-${{ matrix.openlist_arch }}
 
       - name: Release
         uses: softprops/action-gh-release@master
         with:
           tag_name: V${{ steps.get_version.outputs.version }}
           files: |
-            ${{ matrix.sdk_name }}/bin/packages/**/*.apk
-            ${{ github.workspace }}/openlist-${{ matrix.openlist_arch }}
+            ${{ matrix.sdk_name }}/bin/packages/*/base/*.apk
+            openlist-${{ matrix.openlist_arch }}
           body: |
             # 📝 Release Notes
-            - Optimize translation files.
-            - Action file optimization.
+            - Some actions change
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
