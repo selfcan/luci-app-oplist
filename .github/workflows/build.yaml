@@ -129,7 +129,7 @@ jobs:
             ${{ github.workspace }}/*.apk
             ${{ github.workspace }}/openlist-${{ matrix.openlist_nickname }}
           body: |
-            # 📝 Release Notes
-            - Update OpenList & pnpm
+            # 📝 Release Note
+            - Fixes and improvements
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

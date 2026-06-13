@@ -8,7 +8,7 @@ LuCI support for OpenList
 ## ⚠️ Compatibility
 - It is not guaranteed that it can be used on non-x86_64(amd64) and non-aarch64(arm64) architectures.
 ## 🛠 How to build?
-[Generic Document](https://867678.xyz/doc/build)
+[Generic Document](https://867678.xyz/doc/openwrt)
 > It is assumed that you are already in the SDK root directory.
 >
 > Additional operations are required on the source code:
