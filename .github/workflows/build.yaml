@@ -142,8 +142,8 @@ jobs:
       - name: Rename compilation files
         shell: bash
         run: |
+          mv openlist openlist-${{ matrix.openlist_nickname }}
           mv ${{ matrix.sdk_name }}/bin/packages/*/base/luci-app*.apk $GITHUB_WORKSPACE/luci-app-oplist-${{ steps.get_version.outputs.version }}-${{ matrix.patch_arch }}.apk || exit 0
-          mv $GITHUB_WORKSPACE/openlist $GITHUB_WORKSPACE/openlist-${{ matrix.openlist_nickname }}
 
       - name: Release
         uses: softprops/action-gh-release@master
@@ -152,7 +152,7 @@ jobs:
           files: |
             ${{ matrix.sdk_name }}/bin/packages/*/base/*.apk
             ${{ github.workspace }}/*.apk
-            ${{ github.workspace }}/openlist*
+            ${{ github.workspace }}/openlist-${{ matrix.openlist_nickname }}
           body: |
             # 📝 Release Note
             - Fixes and improvements
