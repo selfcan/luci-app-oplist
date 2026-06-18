@@ -128,7 +128,7 @@ jobs:
           fi
           cd root/usr/bin/
           rm -f DONOTREMOVE
-          cp "$GITHUB_WORKSPACE/openlist" ./
+          cp $GITHUB_WORKSPACE/openlist ./
           cd ../../etc/openlist
           rm DONOTREMOVE
 
@@ -143,7 +143,7 @@ jobs:
         shell: bash
         run: |
           mv ${{ matrix.sdk_name }}/bin/packages/*/base/luci-app*.apk $GITHUB_WORKSPACE/luci-app-oplist-${{ steps.get_version.outputs.version }}-${{ matrix.patch_arch }}.apk || exit 0
-          mv openlist openlist-${{ matrix.openlist_nickname }}
+          mv $GITHUB_WORKSPACE/openlist $GITHUB_WORKSPACE/openlist-${{ matrix.openlist_nickname }}
 
       - name: Release
         uses: softprops/action-gh-release@master
@@ -152,7 +152,7 @@ jobs:
           files: |
             ${{ matrix.sdk_name }}/bin/packages/*/base/*.apk
             ${{ github.workspace }}/*.apk
-            ${{ github.workspace }}/openlist-${{ matrix.openlist_nickname }}
+            ${{ github.workspace }}/openlist*
           body: |
             # 📝 Release Note
             - Fixes and improvements
