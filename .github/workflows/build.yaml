@@ -30,7 +30,7 @@ jobs:
           - tag: ""
             openlist_nickname: "linux-glibc-amd64"
           - tag: "CGO_ENABLED=0"
-            openlist_nickname: "linux-amd64-musl"
+            openlist_nickname: "linux-musl-amd64"
             openwrt: "yes"
             patch_arch: "x86_64"
             sdk_name: "openwrt-sdk-x86-64_gcc-14.3.0_musl.Linux-x86_64"
