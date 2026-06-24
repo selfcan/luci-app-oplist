@@ -2,7 +2,7 @@
 LuCI support for OpenList
 ## ⬇️ Downloads
 [GitHub Release](https://github.com/mokanove/luci-app-oplist/releases)
-[Mirror by MoKanove](https://867678.xyz/doc/mirror)
+[Mirror by MoKanove](https://867678.xyz/doc/Mirror)
 ## 🚀 Features
 - The musl binary file of OpenList is packaged, bypassing the older binary with OpenWrt.
 - Support setting TLS, log storage location, etc. for OpenList in LuCI.
