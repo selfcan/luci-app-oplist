@@ -35,10 +35,10 @@ jobs:
             openwrt: "yes"
             patch_arch: "aarch64_generic"
             sdk_name: "openwrt-sdk-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
-          - tag: "GOOS=windows GOARCH=amd64"
-            openlist_nickname: "windows-amd64.exe"
           - tag: "GOOS=darwin GOARCH=arm64"
             openlist_nickname: "darwin-arm64"
+          - tag: "GOOS=windows GOARCH=amd64"
+            openlist_nickname: "windows-amd64.exe"
 
     steps:
       - name: Checkout
