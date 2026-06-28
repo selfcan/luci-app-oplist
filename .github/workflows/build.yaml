@@ -15,10 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - tag: "GOOS=windows GOARCH=amd64"
-            openlist_nickname: "windows-amd64"
-          - tag: "GOOS=darwin GOARCH=arm64"
-            openlist_nickname: "darwin-arm64"
           - tag: "GOAMD64=v4"
             openlist_nickname: "linux-glibc-amd64v4"
           - tag: "GOAMD64=v3"
@@ -39,6 +35,10 @@ jobs:
             openwrt: "yes"
             patch_arch: "aarch64_generic"
             sdk_name: "openwrt-sdk-rockchip-armv8_gcc-14.3.0_musl.Linux-x86_64"
+          - tag: "GOOS=windows GOARCH=amd64"
+            openlist_nickname: "windows-amd64.exe"
+          - tag: "GOOS=darwin GOARCH=arm64"
+            openlist_nickname: "darwin-arm64"
 
     steps:
       - name: Checkout
