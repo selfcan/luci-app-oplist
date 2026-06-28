@@ -76,7 +76,6 @@ jobs:
           cd backend-src
           go mod tidy
           go get -u ./...
-          go fmt ./...
           bash build.sh dev web
 
           builtAt="$(date +'%F %T %z')"
