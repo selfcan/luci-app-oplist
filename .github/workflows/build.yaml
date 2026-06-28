@@ -74,10 +74,8 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/OpenListTeam/OpenList.git backend-src
           cd backend-src
-          go mod tidy
-          go get -u ./...
-          bash build.sh dev web
 
+          bash build.sh dev web
           builtAt="$(date +'%F %T %z')"
           goVersion=$(go version | sed 's/go version //')
           gitAuthor=$(git show -s --format='format:%aN <%ae>' HEAD)
